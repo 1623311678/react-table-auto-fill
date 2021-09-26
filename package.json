@@ -1,0 +1,41 @@
+{
+  "name": "react-table-auto-fill",
+  "version": "0.0.5",
+  "description": "react-table-auto-fill",
+  "homepage": "https://github.com/1623311678/react-table-auto-fill",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc && sass src:dist"
+  },
+  "devDependencies": {
+    "@types/react": ">=17.0.5",
+    "@types/react-dom": ">=17.0.4",
+    "@types/styled-components": "^5.1.9",
+    "react": ">=17.0.2",
+    "react-dom": ">=17.0.2",
+    "typescript": ">=4.2.4"
+  },
+  "peerDependencies": {
+    "react": ">=17.0.2",
+    "react-dom": ">=17.0.2",
+    "styled-components": ">=5.3.0"
+  },
+  "files": [
+    "/dist",
+    "package.json"
+  ],
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/1623311678/react-table-auto-fill.git"
+  },
+  "keywords": [
+    "reatc-table",
+    "auto-fill"
+  ],
+  "author": "wangjunkai",
+  "bugs": {
+    "url": "https://github.com/1623311678/react-table-auto-fill/issues"
+  }
+}

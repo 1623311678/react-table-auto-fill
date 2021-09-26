@@ -1,0 +1,77 @@
+.auto-fill-table {
+  position: relative;
+  display: inline-block;
+  margin: 0 0 16px;
+  border: 1px solid #f0f0f0;
+  border-radius: 2px;
+  transition: all 0.2s;
+  max-width: 1080px;
+  overflow: auto;
+  height: 400px;
+}
+.auto-fill-table tr {
+  display: table-row;
+  vertical-align: inherit;
+  border-color: inherit;
+}
+.auto-fill-table .table-head .table-thd-tr {
+  background: #fafafa;
+  color: #000000d9;
+}
+.auto-fill-table .table-head .table-thd-tr .table-th {
+  padding: 16px;
+  position: relative;
+  color: #000000d9;
+  font-weight: 500;
+  text-align: left;
+  background: #fafafa;
+  border-bottom: 1px solid #f0f0f0;
+  border-right: 1px solid #f0f0f0;
+  transition: background 0.3s ease;
+  overflow-wrap: break-word;
+}
+.auto-fill-table .table-body {
+  table-layout: fixed;
+}
+.auto-fill-table .table-body .body-tr .table-cell {
+  position: relative;
+  padding: 16px;
+  border-right: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
+  overflow-wrap: break-word;
+  border-collapse: collapse;
+}
+.auto-fill-table .table-body .body-tr .table-cell .cur-box {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  border: 2px solid blue;
+  border-collapse: collapse;
+  box-sizing: content-box;
+  pointer-events: none;
+}
+.auto-fill-table .table-body .body-tr .table-cell .cur-box .cur-box-dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  bottom: -5px;
+  right: -5px;
+  background-color: blue;
+  z-index: 1;
+  cursor: crosshair;
+  pointer-events: auto;
+}
+.auto-fill-table .table-body .body-tr .table-cell .cur-box-left {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  box-sizing: content-box;
+  top: 0;
+  left: 0px;
+  border: 2px solid blue;
+  border-collapse: collapse;
+}
+
+/*# sourceMappingURL=index.css.map */
