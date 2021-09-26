@@ -128,7 +128,7 @@ export default function Table(props: TableProps) {
       ) {
         ret[key] = key;
         const targetKey = cellValue["key"];
-        if (getCurrentPageData(dataSource)[X][targetKey]?.data) {
+        if (getCurrentPageData(dataSource)[X]?.[targetKey].data) {
           getCurrentPageData(dataSource)[X][targetKey].data =
             cellValue["data"]["data"];
         }
@@ -227,7 +227,7 @@ export default function Table(props: TableProps) {
     }
     mouseFlag = false;
     setCellInfo({ ...cellInfo });
-    if (cellInfo["0_0"] && fRenderBottom !== cellInfo["0_0"]["info"].bottom) {
+    if (cellInfo["0_0"] && !fRenderBottom) {
       setRenderBottom(cellInfo["0_0"]["info"].bottom);
     }
   }, [columns, dataSource, pageSize, pageNumber]);

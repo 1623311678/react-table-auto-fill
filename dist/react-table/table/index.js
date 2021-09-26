@@ -112,7 +112,7 @@ function Table(props) {
                 startY == Y) {
                 ret[key] = key;
                 var targetKey = cellValue["key"];
-                if ((_a = getCurrentPageData(dataSource)[X][targetKey]) === null || _a === void 0 ? void 0 : _a.data) {
+                if ((_a = getCurrentPageData(dataSource)[X]) === null || _a === void 0 ? void 0 : _a[targetKey].data) {
                     getCurrentPageData(dataSource)[X][targetKey].data =
                         cellValue["data"]["data"];
                 }
@@ -199,7 +199,7 @@ function Table(props) {
         }
         mouseFlag = false;
         setCellInfo(__assign({}, cellInfo));
-        if (cellInfo["0_0"] && fRenderBottom !== cellInfo["0_0"]["info"].bottom) {
+        if (cellInfo["0_0"] && !fRenderBottom) {
             setRenderBottom(cellInfo["0_0"]["info"].bottom);
         }
     }, [columns, dataSource, pageSize, pageNumber]);
