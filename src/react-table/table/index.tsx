@@ -128,7 +128,7 @@ export default function Table(props: TableProps) {
       ) {
         ret[key] = key;
         const targetKey = cellValue["key"];
-        if (getCurrentPageData(dataSource)[X]?.[targetKey].data) {
+        if (getCurrentPageData(dataSource)[X]&&getCurrentPageData(dataSource)[X][targetKey].data) {
           getCurrentPageData(dataSource)[X][targetKey].data =
             cellValue["data"]["data"];
         }

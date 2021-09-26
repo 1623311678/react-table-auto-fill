@@ -92,7 +92,6 @@ function Table(props) {
         mouseFlag = true;
     }
     function findActiveIndex(x, y) {
-        var _a;
         if (!mouseFlag)
             return;
         var ret = {};
@@ -112,7 +111,7 @@ function Table(props) {
                 startY == Y) {
                 ret[key] = key;
                 var targetKey = cellValue["key"];
-                if ((_a = getCurrentPageData(dataSource)[X]) === null || _a === void 0 ? void 0 : _a[targetKey].data) {
+                if (getCurrentPageData(dataSource)[X] && getCurrentPageData(dataSource)[X][targetKey].data) {
                     getCurrentPageData(dataSource)[X][targetKey].data =
                         cellValue["data"]["data"];
                 }
