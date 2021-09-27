@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useState, Fragment } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+  Fragment,
+  useRef,
+} from "react";
 import "./index.css";
 
 interface Colums {
@@ -21,11 +27,11 @@ export default function Table(props: TableProps) {
   const [activeRange, setActiveRange] = useState<any>({});
   const [sTop, setTop] = useState(0);
   const [curIndex, setCurIndex] = useState<any>(null);
-  const [cellInfo, setCellInfo] = useState<any>({});
-  // const [pageSize, setPageSize] = useState(10);
-  // const [pageNumber, setPageNum] = useState(1);
+  const [cellInfo, setCellInfo] = useState({});
   const [fRenderBottom, setRenderBottom] = useState<any>(null);
-  function getCurrentPageData(dataSource: any) {
+  const currentNumber: any = useRef(1);
+  const currentSize: any = useRef(10);
+  function getCurrentPageData(dataSource: any[]) {
     return dataSource;
   }
   function GetColGroup(): any {
@@ -40,7 +46,21 @@ export default function Table(props: TableProps) {
       </th>
     ));
   }
-  function GetTableBodyCell(data: any, rowIndex: number): any {
+  function GetTableBodyCell(
+    data: {
+      [x: string]:
+        | string
+        | number
+        | boolean
+        | {}
+        | React.ReactElement<any, string | React.JSXElementConstructor<any>>
+        | React.ReactNodeArray
+        | React.ReactPortal
+        | null
+        | undefined;
+    },
+    rowIndex: any
+  ): any {
     return columns.map((item: Colums, colIndex) => {
       const key = item.key;
       const targetIndex = `${rowIndex}_${colIndex}`;
@@ -73,7 +93,7 @@ export default function Table(props: TableProps) {
   }
   function GetTableBodyTr(): any {
     if (getCurrentPageData(dataSource).length > 0) {
-      return getCurrentPageData(dataSource).map((data: any, index: number) => {
+      return getCurrentPageData(dataSource).map((data: any, index: any) => {
         return (
           <tr className="body-tr" key={`${index}_body_tr`}>
             {GetTableBodyCell(data, index)}
@@ -83,12 +103,15 @@ export default function Table(props: TableProps) {
     }
   }
   function clickTableCell(
-    e: any,
-    rowIndex: number,
+    e: React.MouseEvent,
+    rowIndex: any,
     colIndex: number,
     cellData: { data: any; key: string }
   ) {
-    if (colIndex === 0 || e.target.className !== "table-cell") {
+    if (
+      colIndex === 0 ||
+      (e.target as HTMLElement).className !== "table-cell"
+    ) {
       return;
     }
     const activeIndex = { rowIndex, colIndex, cellData };
@@ -97,7 +120,7 @@ export default function Table(props: TableProps) {
   }
   function mouseDown(
     e: React.MouseEvent<HTMLElement, MouseEvent>,
-    rowIndex: number,
+    rowIndex: any,
     colIndex: number
   ) {
     if (colIndex === 0) {
@@ -109,7 +132,7 @@ export default function Table(props: TableProps) {
   }
   function findActiveIndex(x: number, y: number) {
     if (!mouseFlag) return;
-    const ret: any = {};
+    const ret = {};
     document.body.style.cursor = "crosshair";
     const startX = activeCellIndex.rowIndex;
     const startY = activeCellIndex.colIndex;
@@ -128,7 +151,7 @@ export default function Table(props: TableProps) {
       ) {
         ret[key] = key;
         const targetKey = cellValue["key"];
-        if (getCurrentPageData(dataSource)[X]&&getCurrentPageData(dataSource)[X][targetKey].data) {
+        if (getCurrentPageData(dataSource)[X]?.[targetKey]) {
           getCurrentPageData(dataSource)[X][targetKey].data =
             cellValue["data"]["data"];
         }
@@ -138,7 +161,7 @@ export default function Table(props: TableProps) {
     deleteStartPos(ret);
     setActiveRange({ ...ret });
   }
-  function interate(y: number, ret: { [x: string]: string }) {
+  function interate(y: number, ret: React.SetStateAction<{}>) {
     const box = document.querySelector(".auto-fill-table");
     if (!box) return;
     const bottom = box.getBoundingClientRect().bottom;
@@ -158,7 +181,9 @@ export default function Table(props: TableProps) {
             Number(lasteCell.x) + 1
           }_${Number(lasteCell.y)}`;
           const targetKey = cellValue["key"];
-          if (getCurrentPageData(dataSource)[Number(lasteCell.x) + 1]) {
+          if (
+            getCurrentPageData(dataSource)[Number(lasteCell.x) + 1]?.[targetKey]
+          ) {
             getCurrentPageData(dataSource)[Number(lasteCell.x) + 1][
               targetKey
             ].data = cellValue["data"]["data"];
@@ -180,7 +205,7 @@ export default function Table(props: TableProps) {
       (event: React.MouseEvent<HTMLElement, MouseEvent>): void;
       (arg0: any): void;
     },
-    delay: number
+    delay: number | undefined
   ) {
     let timer = null;
     if (timer) {
@@ -209,27 +234,35 @@ export default function Table(props: TableProps) {
     delete ret[`${startX}_${startY}`];
   }
   useEffect(() => {
-    document.body.style.cursor = "pointer";
-    const tBody: any = document.querySelector(".auto-fill-table");
-    const cells = tBody.querySelectorAll(".table-cell");
-    const length = cells.length;
-    if (cells.length > 0) {
-      for (let i = 0; i < length; i += 1) {
-        const perCell = cells[i];
-        const keyName = perCell.attributes["key-name"]["nodeValue"];
-        const posArr = keyName.split("_");
-        cellInfo[keyName] = {
-          info: perCell.getBoundingClientRect(),
-          x: posArr[0],
-          y: posArr[1],
-        };
+    setTimeout(function () {
+      document.body.style.cursor = "pointer";
+      const tBody: any = document.querySelector(".auto-fill-table");
+      const cells = tBody.querySelectorAll(".table-cell");
+      const length = cells.length;
+      if (cells.length > 0) {
+        for (let i = 0; i < length; i += 1) {
+          const perCell = cells[i];
+          const keyName = perCell.attributes["key-name"]["nodeValue"];
+          const posArr = keyName.split("_");
+          cellInfo[keyName] = {
+            info: perCell.getBoundingClientRect(),
+            x: posArr[0],
+            y: posArr[1],
+          };
+        }
       }
-    }
-    mouseFlag = false;
-    setCellInfo({ ...cellInfo });
-    if (cellInfo["0_0"] && !fRenderBottom) {
-      setRenderBottom(cellInfo["0_0"]["info"].bottom);
-    }
+      mouseFlag = false;
+      setCellInfo({ ...cellInfo });
+      if (
+        (cellInfo["0_0"] && !fRenderBottom) ||
+        currentNumber.current !== pageNumber ||
+        currentSize.current !== pageSize
+      ) {
+        setRenderBottom(cellInfo["0_0"]["info"].bottom);
+        currentNumber.current = pageNumber;
+        currentSize.current = pageSize;
+      }
+    }, 0);
   }, [columns, dataSource, pageSize, pageNumber]);
   useEffect(() => {
     if (activeCellIndex) {

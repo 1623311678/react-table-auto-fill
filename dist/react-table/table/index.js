@@ -40,9 +40,9 @@ function Table(props) {
     var _c = (0, react_1.useState)(0), sTop = _c[0], setTop = _c[1];
     var _d = (0, react_1.useState)(null), curIndex = _d[0], setCurIndex = _d[1];
     var _e = (0, react_1.useState)({}), cellInfo = _e[0], setCellInfo = _e[1];
-    // const [pageSize, setPageSize] = useState(10);
-    // const [pageNumber, setPageNum] = useState(1);
     var _f = (0, react_1.useState)(null), fRenderBottom = _f[0], setRenderBottom = _f[1];
+    var currentNumber = (0, react_1.useRef)(1);
+    var currentSize = (0, react_1.useRef)(10);
     function getCurrentPageData(dataSource) {
         return dataSource;
     }
@@ -76,7 +76,8 @@ function Table(props) {
         }
     }
     function clickTableCell(e, rowIndex, colIndex, cellData) {
-        if (colIndex === 0 || e.target.className !== "table-cell") {
+        if (colIndex === 0 ||
+            e.target.className !== "table-cell") {
             return;
         }
         var activeIndex = { rowIndex: rowIndex, colIndex: colIndex, cellData: cellData };
@@ -92,6 +93,7 @@ function Table(props) {
         mouseFlag = true;
     }
     function findActiveIndex(x, y) {
+        var _a;
         if (!mouseFlag)
             return;
         var ret = {};
@@ -111,7 +113,7 @@ function Table(props) {
                 startY == Y) {
                 ret[key] = key;
                 var targetKey = cellValue["key"];
-                if (getCurrentPageData(dataSource)[X] && getCurrentPageData(dataSource)[X][targetKey].data) {
+                if ((_a = getCurrentPageData(dataSource)[X]) === null || _a === void 0 ? void 0 : _a[targetKey]) {
                     getCurrentPageData(dataSource)[X][targetKey].data =
                         cellValue["data"]["data"];
                 }
@@ -132,6 +134,7 @@ function Table(props) {
         var lasteCell = cellInfo[lasteActiveKey];
         var cellValue = activeCellIndex.cellData;
         setTimeout(function () {
+            var _a;
             // box.removeEventListener("mousemove", mouseMoveAction);
             if (scrollPosition > 0 && scrollPosition < 30 && mouseFlag) {
                 if (lasteCell) {
@@ -140,7 +143,7 @@ function Table(props) {
                     setCurIndex(lasteActiveKey);
                     ret[Number(lasteCell.x) + 1 + "_" + Number(lasteCell.y)] = Number(lasteCell.x) + 1 + "_" + Number(lasteCell.y);
                     var targetKey = cellValue["key"];
-                    if (getCurrentPageData(dataSource)[Number(lasteCell.x) + 1]) {
+                    if ((_a = getCurrentPageData(dataSource)[Number(lasteCell.x) + 1]) === null || _a === void 0 ? void 0 : _a[targetKey]) {
                         getCurrentPageData(dataSource)[Number(lasteCell.x) + 1][targetKey].data = cellValue["data"]["data"];
                     }
                     deleteStartPos(ret);
@@ -180,27 +183,33 @@ function Table(props) {
         delete ret[startX + "_" + startY];
     }
     (0, react_1.useEffect)(function () {
-        document.body.style.cursor = "pointer";
-        var tBody = document.querySelector(".auto-fill-table");
-        var cells = tBody.querySelectorAll(".table-cell");
-        var length = cells.length;
-        if (cells.length > 0) {
-            for (var i = 0; i < length; i += 1) {
-                var perCell = cells[i];
-                var keyName = perCell.attributes["key-name"]["nodeValue"];
-                var posArr = keyName.split("_");
-                cellInfo[keyName] = {
-                    info: perCell.getBoundingClientRect(),
-                    x: posArr[0],
-                    y: posArr[1],
-                };
+        setTimeout(function () {
+            document.body.style.cursor = "pointer";
+            var tBody = document.querySelector(".auto-fill-table");
+            var cells = tBody.querySelectorAll(".table-cell");
+            var length = cells.length;
+            if (cells.length > 0) {
+                for (var i = 0; i < length; i += 1) {
+                    var perCell = cells[i];
+                    var keyName = perCell.attributes["key-name"]["nodeValue"];
+                    var posArr = keyName.split("_");
+                    cellInfo[keyName] = {
+                        info: perCell.getBoundingClientRect(),
+                        x: posArr[0],
+                        y: posArr[1],
+                    };
+                }
             }
-        }
-        mouseFlag = false;
-        setCellInfo(__assign({}, cellInfo));
-        if (cellInfo["0_0"] && !fRenderBottom) {
-            setRenderBottom(cellInfo["0_0"]["info"].bottom);
-        }
+            mouseFlag = false;
+            setCellInfo(__assign({}, cellInfo));
+            if ((cellInfo["0_0"] && !fRenderBottom) ||
+                currentNumber.current !== pageNumber ||
+                currentSize.current !== pageSize) {
+                setRenderBottom(cellInfo["0_0"]["info"].bottom);
+                currentNumber.current = pageNumber;
+                currentSize.current = pageSize;
+            }
+        }, 0);
     }, [columns, dataSource, pageSize, pageNumber]);
     (0, react_1.useEffect)(function () {
         if (activeCellIndex) {
