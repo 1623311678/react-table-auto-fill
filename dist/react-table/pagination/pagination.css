@@ -28,7 +28,7 @@
 .auto-fill-pagination ul .pagination-jump-icon {
   position: relative;
   border: none;
-  color: #00000040;
+  color: rgba(0, 0, 0, 0.2509803922);
 }
 .auto-fill-pagination ul .pagination-jump-icon:hover {
   border: none;

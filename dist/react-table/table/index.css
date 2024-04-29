@@ -16,12 +16,12 @@
 }
 .auto-fill-table .table-head .table-thd-tr {
   background: #fafafa;
-  color: #000000d9;
+  color: rgba(0, 0, 0, 0.8509803922);
 }
 .auto-fill-table .table-head .table-thd-tr .table-th {
   padding: 16px;
   position: relative;
-  color: #000000d9;
+  color: rgba(0, 0, 0, 0.8509803922);
   font-weight: 500;
   text-align: left;
   background: #fafafa;
